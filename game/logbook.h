@@ -2,27 +2,31 @@
 #define LOGBOOK_H
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
-class Logbook
+class logbook
 {
 private:
-    int suitGrade;
-    int medKits;
+    string user;
+    string name;
+    int pageNumber;
+    int size;
+    int capacity;
+    vector goodTraits;
+    vector badTraits;
+    string alienAssessment;
 
 public:
     Logbook();
-    int getsuitGrade();
-    int getmedKits();
-
-    int readMovies(string fileName);
-    void printMoviesByYear(string releaseYear);
-
-    int readRatings(string fileName);
-    int getRating(string username, string title);
-    int getCountWatchedMovies(string username);
-    double calcAvgRating(string title);
-    int addUser(string username);
-    int rentMovie(string username, string title, int newRating);
+    void setName(string name_);
+    void setUser(string user_);
+    void setpageNumber(int number);
+    void setSize(int size_);
+    void setCapacity(int capacity_);
+    void addGoodTrait(string trait);
+    void addBadTrait(string trait);
+    void setalienAssessment(string assessment_);
+    void printPage();
 };
 #endif
