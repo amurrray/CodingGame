@@ -15,5 +15,6 @@ public:
     int getDamage();
     int getRange();
 
+    void useWeapon();
 };
 #endif

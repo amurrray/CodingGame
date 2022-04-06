@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-class logbook
+class Logbook
 {
 private:
     string user;
@@ -13,8 +13,8 @@ private:
     int pageNumber;
     int size;
     int capacity;
-    vector goodTraits;
-    vector badTraits;
+    vector<string> goodTraits;
+    vector<string> badTraits;
     string alienAssessment;
 
 public:
