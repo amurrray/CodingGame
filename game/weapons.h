@@ -9,12 +9,14 @@ class Weapons
 private:
     int damage;
     int range;
-
+    bool owned;
 public:
     Weapons();
     int getDamage();
     int getRange();
-
+    bool getStatus();
+    void loseWeapon();
     void useWeapon();
+    void getWeapon();
 };
 #endif

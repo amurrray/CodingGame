@@ -3,6 +3,7 @@
 using namespace std;
 Player::Player()
 {
+    Weapons lightsaber;
     money = 100000;
     healthPercent = 100;
     suitPercent = 100;
@@ -11,6 +12,7 @@ Player::Player()
     medKits = 0;
     translator = false;
     guns[0] = lightsaber;
+    guns[0].getWeapon();
     currentWeapon = 0;
     alive = true;
 }
@@ -57,20 +59,27 @@ void Player::playerDied()
 {
     alive = false;
 }
+void Player::repairSuit(){
+    suitPercent = suitPercent + 40;
+}
 // battle
-int Player::loseFight()
+void Player::loseFight()
 {
     takeDamage(30, (100 - (20 * suitGrade)));
-    guns[currentWeapon] = none;
+    guns[currentWeapon].loseWeapon();
 }
-int Player::winFight()
+void Player::winFight()
 {
     money = money + 200;
     takeDamage(0, 10);
 }
 void Player::forfeit()
 {
-    guns[currentWeapon] = none;
+    guns[currentWeapon].loseWeapon();
+}
+bool Player::getWeaponstatus(){
+    bool status = guns[currentWeapon].getStatus();
+    return status;
 }
 // misfortune
 void Player::weatherStorm()
@@ -95,5 +104,14 @@ void Player::usemedKit()
     {
         medKits = medKits - 1;
         healthPercent = healthPercent + 40;
+    }
+}
+int Player::addmedKit(int number){
+    if ((medKits + number) <= 5){
+        medKits = medKits + number;
+        return medKits;
+    }
+    else{
+        return -1;
     }
 }

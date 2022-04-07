@@ -6,6 +6,7 @@
 #include "weapons.h"
 using namespace std;
 
+
 class Player
 {
 private:
@@ -32,10 +33,12 @@ public:
     // health
     void takeDamage(int health, int suit);
     void playerDied();
+    void repairSuit();
     // battle
-    int loseFight();
-    int winFight();
+    void loseFight();
+    void winFight();
     void forfeit();
+    bool getWeaponstatus();
     // misfortune
     void weatherStorm();
     void crater();
@@ -43,5 +46,6 @@ public:
     // misc
     void changePlanet();
     void usemedKit();
+    int addmedKit(int number);
 };
 #endif
