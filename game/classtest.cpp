@@ -6,7 +6,8 @@
 #include <cassert>
 using namespace std;
 
-int main(){
+int main()
+{
     Player carter;
     assert(carter.getmoney() == 100000);
     assert(carter.gethealthPercent() == 100);
@@ -15,7 +16,7 @@ int main(){
     assert(carter.getsuitGrade() == 1);
     assert(carter.getmedKits() == 0);
     assert(carter.getcurrentWeapon() == 0);
-    carter.takeDamage(10,10);
+    carter.takeDamage(10, 10);
     assert(carter.gethealthPercent() == 90);
     assert(carter.getsuitPercent() == 90);
     assert(carter.addmedKit(6) == -1);
@@ -41,4 +42,10 @@ int main(){
     assert(carter.getsuitPercent() == 50);
     carter.spaceSickness();
     assert(carter.gethealthPercent() == 90);
+    Planet earth;
+    cout << earth.getSize() << endl;
+    cout << earth.getCapacity() << endl;
+    cout << earth.getName() << endl;
+    cout << earth.getHabitable() << endl;
+    cout << earth.getAssessment() << endl;
 }
