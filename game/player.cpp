@@ -15,10 +15,15 @@ Player::Player()
     guns[0].getWeapon();
     currentWeapon = 0;
     alive = true;
+    name = "";
 }
-int Player::getmoney()
+int Player::getMoney()
 {
     return money;
+}
+void Player::chargeMoney(int price)
+{
+    money = money - price;
 }
 int Player::gethealthPercent()
 {
@@ -44,6 +49,10 @@ int Player::getcurrentWeapon()
 {
     return currentWeapon;
 }
+void Player::changecurrentWeapon(int pos)
+{
+    currentWeapon = pos;
+}
 // health
 void Player::takeDamage(int health, int suit)
 {
@@ -59,8 +68,17 @@ void Player::playerDied()
 {
     alive = false;
 }
-void Player::repairSuit(){
+void Player::repairSuit()
+{
     suitPercent = suitPercent + 40;
+}
+string Player::getName()
+{
+    return name;
+}
+void Player::setName(string name_)
+{
+    name = name_;
 }
 // battle
 void Player::loseFight()
@@ -77,8 +95,9 @@ void Player::forfeit()
 {
     guns[currentWeapon].loseWeapon();
 }
-bool Player::getWeaponstatus(){
-    bool status = guns[currentWeapon].getStatus();
+bool Player::getWeaponstatus(int pos)
+{
+    bool status = guns[pos].getStatus();
     return status;
 }
 // misfortune
@@ -106,12 +125,19 @@ void Player::usemedKit()
         healthPercent = healthPercent + 40;
     }
 }
-int Player::addmedKit(int number){
-    if ((medKits + number) <= 5){
+int Player::addmedKit(int number)
+{
+    if ((medKits + number) <= 5)
+    {
         medKits = medKits + number;
         return medKits;
     }
-    else{
+    else
+    {
         return -1;
     }
+}
+void Player::buyWeapon(int pos)
+{
+    guns[pos].getWeapon();
 }

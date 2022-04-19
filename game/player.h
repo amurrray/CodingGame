@@ -6,7 +6,6 @@
 #include "weapons.h"
 using namespace std;
 
-
 class Player
 {
 private:
@@ -20,16 +19,21 @@ private:
     Weapons guns[3];
     int currentWeapon;
     bool alive;
+    string name;
 
 public:
     Player();
-    int getmoney();
+    int getMoney();
+    void chargeMoney(int price);
     int gethealthPercent();
     int getsuitPercent();
     int getfuel();
     int getsuitGrade();
     int getmedKits();
     int getcurrentWeapon();
+    void changecurrentWeapon(int pos);
+    string getName();
+    void setName(string name_);
     // health
     void takeDamage(int health, int suit);
     void playerDied();
@@ -38,7 +42,7 @@ public:
     void loseFight();
     void winFight();
     void forfeit();
-    bool getWeaponstatus();
+    bool getWeaponstatus(int pos);
     // misfortune
     void weatherStorm();
     void crater();
@@ -47,5 +51,6 @@ public:
     void changePlanet();
     void usemedKit();
     int addmedKit(int number);
+    void buyWeapon(int pos);
 };
 #endif
