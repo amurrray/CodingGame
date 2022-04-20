@@ -34,10 +34,13 @@ public:
     void changecurrentWeapon(int pos);
     string getName();
     void setName(string name_);
+    void acquireTranslator();
+    void addFuel(int amount);
     // health
     void takeDamage(int health, int suit);
     void playerDied();
     void repairSuit();
+    void upgradeSuit(int grade);
     // battle
     void loseFight();
     void winFight();
