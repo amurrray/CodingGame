@@ -269,7 +269,7 @@ bool mainMenu(Player steve, Map map, bool phase2){
     int choice;
     cin >> choice;
     switch(choice){
-        case 1:
+        case 1:{
             bool move = true;
             while (move == true){
                 map.displayMap();
@@ -317,6 +317,25 @@ bool mainMenu(Player steve, Map map, bool phase2){
                         break;
                 }
             }
+            break;
+        }
+        case 2:
+            cout << "Health:" << endl;
+            for (int i = 0; i < (steve.gethealthPercent() / 5); i++){
+                cout << "_";
+            }
+            cout << steve.gethealthPercent() << "%" << endl;
+            cout << "Space Suit Health: " << endl;
+            for (int i = 0; i < (steve.getsuitPercent() / 5); i++){
+                cout << "_";
+            }
+            cout << steve.getsuitPercent() << "%" << endl;
+            cout << "Fuel tank:" << endl;
+            for (int i = 0; i < (steve.getfuel() / 10000); i++){
+                cout << "_";
+            }
+            cout << steve.getfuel() << endl;
+            break;
 
     }
 }

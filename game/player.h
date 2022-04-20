@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "weapons.h"
+#include "logbook.h"
 using namespace std;
 
 class Player
