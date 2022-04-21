@@ -36,6 +36,7 @@ public:
     string getName();
     void setName(string name_);
     void acquireTranslator();
+    bool hasTranslator();
     void addFuel(int amount);
     // health
     void takeDamage(int health, int suit);

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <time.h>
 #include "player.h"
 #include "map.h"
 #include "planet.h"
@@ -8,14 +9,15 @@
 
 using namespace std;
 
-void createCharacter(Player steve)
+void createCharacter(Player &steve)
 {
     cout << "Enter your name:" << endl;
     string name;
     cin >> name;
     steve.setName(name);
 }
-void storeExplanation(){
+void storeExplanation()
+{
     cout << "WEAPONS. If your weapon breaks or if you lose your weapon during an event, you may need additional weapons to defend yourself!" << endl
          << "TRANSLATOR. Allows you to communicate with friendly aliens to get their assessment of the planet and increases odds of winning against a hostile alien." << endl
          << "SPACE SUIT. The better the spacesuit, the more durable and protective you will be during the mission and an alien attack." << endl
@@ -25,7 +27,63 @@ void storeExplanation(){
          << endl;
     return;
 }
-void goToStore(Player steve)
+
+int randNum(int low, int high)
+{
+    srand(time(NULL));
+    int num = rand() % (high - low) + low;
+    return num;
+}
+
+void generateMap(Map &map, Logbook &logbook)
+{
+    logbook.newPage();
+    map.resetMap();
+    // spawn alien
+    int x = randNum(1, 11);
+    int y = randNum(1, 11);
+
+    // cout << map.spawnNPC(x, y) << endl;
+    // cout << x << "," << y << endl;
+    map.spawnNPC(randNum(1, 11), randNum(1, 11));
+    // spawn sites
+    for (int i = 0; i < 10; i++)
+    {
+        int x = 0;
+        int y = 0;
+        bool notFree = true;
+        while (notFree)
+        {
+            x = randNum(1, 11);
+            y = randNum(1, 11);
+            if (map.isFreeSpace(x, y) == true)
+            {
+                notFree = false;
+            }
+        }
+        map.spawnSite(x, y, randNum(1, 4));
+    }
+    // spawn misfortunes
+    for (int i = 0; i < 5; i++)
+    {
+        int x = 0;
+        int y = 0;
+        bool notFree = true;
+        while (notFree)
+        {
+            x = randNum(1, 11);
+            y = randNum(1, 11);
+            if (map.isFreeSpace(x, y) == true)
+            {
+                notFree = false;
+            }
+        }
+        map.spawnMisfortune(x, y, randNum(1, 3));
+    }
+    map.setMisfortuneCount(5);
+}
+
+void goToStore(Player &steve)
 {
     cout << "Your current balance is " << steve.getMoney() << endl;
     cout << "Which item do you wish to buy?" << endl;
@@ -104,13 +162,15 @@ void goToStore(Player steve)
         cout << "Would you like to purchase a translator device ($5,000)? 1 for yes, 0 for no." << endl;
         int input;
         cin >> input;
-        if ((input == 1) && (steve.getMoney() >= 5000)){
+        if ((input == 1) && (steve.getMoney() >= 5000))
+        {
             steve.acquireTranslator();
             steve.chargeMoney(5000);
             cout << "You purchased a translator" << endl;
             goToStore(steve);
         }
-        else {
+        else
+        {
             cout << "you either already have a translator or don't have enough money" << endl;
             goToStore(steve);
         }
@@ -123,100 +183,113 @@ void goToStore(Player steve)
         cout << "4. Space suit grade 5 is $20,000" << endl;
         int choice;
         cin >> choice;
-        switch (choice){
-            case 1:
-                if (steve.getMoney() >= 5000){
-                    cout << "Your suit is now a grade 2" << endl;
-                    steve.upgradeSuit(2);
-                    steve.repairSuit();
-                    steve.chargeMoney(5000);
-                    goToStore(steve);
-                }
-                else {
-                    cout << "You don't have enough money"<< endl;
-                    goToStore(steve);
-                }
-                break;
-            case 2:
-                if (steve.getMoney() >= 10000){
-                    cout << "Your suit is now grade 3" << endl;
-                    steve.upgradeSuit(3);
-                    steve.repairSuit();
-                    steve.chargeMoney(10000);
-                    goToStore(steve);
-                }
-                else{
-                    cout << "You don't have enough money" << endl;
-                    goToStore(steve);
-                }
-                break;
-            case 3:
-                if (steve.getMoney() >= 15000){
-                    cout << "Your suit is now a grade 4" << endl;
-                    steve.upgradeSuit(4);
-                    steve.repairSuit();
-                    steve.chargeMoney(15000);
-                    goToStore(steve);
-                }
-                else{
-                    cout << "You don't have enough money" << endl;
-                    goToStore(steve);
-                }
-                break;
-            case 4:
-                if (steve.getMoney() >= 20000){
-                    cout << "Your suit is now a grade 5" << endl;
-                    steve.upgradeSuit(5);
-                    steve.repairSuit();
-                    steve.chargeMoney(20000);
-                    goToStore(steve);
-                }
-                else{
-                    cout << "You don't have enough money" << endl;
-                    goToStore(steve);
-                }
-                break;
-            default:
-                cout << "Invalid input" << endl;
+        switch (choice)
+        {
+        case 1:
+            if (steve.getMoney() >= 5000)
+            {
+                cout << "Your suit is now a grade 2" << endl;
+                steve.upgradeSuit(2);
+                steve.repairSuit();
+                steve.chargeMoney(5000);
                 goToStore(steve);
-        }
-        break;
+            }
+            else
+            {
+                cout << "You don't have enough money" << endl;
+                goToStore(steve);
+            }
+            break;
+        case 2:
+            if (steve.getMoney() >= 10000)
+            {
+                cout << "Your suit is now grade 3" << endl;
+                steve.upgradeSuit(3);
+                steve.repairSuit();
+                steve.chargeMoney(10000);
+                goToStore(steve);
+            }
+            else
+            {
+                cout << "You don't have enough money" << endl;
+                goToStore(steve);
+            }
+            break;
+        case 3:
+            if (steve.getMoney() >= 15000)
+            {
+                cout << "Your suit is now a grade 4" << endl;
+                steve.upgradeSuit(4);
+                steve.repairSuit();
+                steve.chargeMoney(15000);
+                goToStore(steve);
+            }
+            else
+            {
+                cout << "You don't have enough money" << endl;
+                goToStore(steve);
+            }
+            break;
         case 4:
-            cout << "How many medical kits would you like to purchase ($2,000 each)?" << "you currently have " << steve.getmedKits() << endl;
-            int number;
-            cin >> number;
-            if (steve.getMoney() >= (number * 2000)){
-                steve.addmedKit(number);
-                steve.chargeMoney(number * 2000);
+            if (steve.getMoney() >= 20000)
+            {
+                cout << "Your suit is now a grade 5" << endl;
+                steve.upgradeSuit(5);
+                steve.repairSuit();
+                steve.chargeMoney(20000);
                 goToStore(steve);
             }
-            else {
+            else
+            {
                 cout << "You don't have enough money" << endl;
                 goToStore(steve);
             }
-        break;
-        case 5:
-            cout << "You have " << steve.getfuel() << " gallons of fuel. How many gallons would you like to purchase ($1,000 per 1,000 gallons)" << endl;
-            int amount;
-            cin >> amount;
-            if (steve.getMoney() >= amount){
-                steve.addFuel(amount);
-                steve.chargeMoney(amount);
-                cout << "You now have " << steve.getfuel() << " gallons of fuel." << endl;
-                goToStore(steve);
-            }
-            else {
-                cout << "You don't have enough money" << endl;
-                goToStore(steve);
-            }
-        break;
-        case 6:
-            cout << "Thank you for shopping" << endl;
-        break;
+            break;
         default:
             cout << "Invalid input" << endl;
             goToStore(steve);
-
+        }
+        break;
+    case 4:
+        cout << "How many medical kits would you like to purchase ($2,000 each)?"
+             << "you currently have " << steve.getmedKits() << endl;
+        int number;
+        cin >> number;
+        if (steve.getMoney() >= (number * 2000))
+        {
+            steve.addmedKit(number);
+            steve.chargeMoney(number * 2000);
+            goToStore(steve);
+        }
+        else
+        {
+            cout << "You don't have enough money" << endl;
+            goToStore(steve);
+        }
+        break;
+    case 5:
+        cout << "You have " << steve.getfuel() << " gallons of fuel. How many gallons would you like to purchase ($1,000 per 1,000 gallons)" << endl;
+        int amount;
+        cin >> amount;
+        if (steve.getMoney() >= amount)
+        {
+            steve.addFuel(amount);
+            steve.chargeMoney(amount);
+            cout << "You now have " << steve.getfuel() << " gallons of fuel." << endl;
+            goToStore(steve);
+        }
+        else
+        {
+            cout << "You don't have enough money" << endl;
+            goToStore(steve);
+        }
+        break;
+    case 6:
+        cout << "Thank you for shopping" << endl;
+        break;
+    default:
+        cout << "Invalid input" << endl;
+        goToStore(steve);
     }
 }
 
@@ -257,88 +330,145 @@ void chooseCrewmates()
         cout << "You have decided to work alone, way to go bud." << endl;
     }
 }
-bool mainMenu(Player steve, Map map, bool phase2){
+
+bool mainMenu(Player &steve, Map &map, Logbook &logbook, bool phase2)
+{
     cout << "Select one:" << endl
          << "1. Move" << endl
          << "2. View status" << endl
-         << "3. View log book"
+         << "3. View log book" << endl
          << "4. Resource center " << endl
          << "5. Report planet as habitable" << endl
          << "6. Enter wormhole to next planet" << endl
          << "7. Give up" << endl;
     int choice;
     cin >> choice;
-    switch(choice){
-        case 1:{
-            bool move = true;
-            while (move == true){
-                map.displayMap();
-                cout << "Select one: w. up s. down d. right a. left m. menu" << endl;
-                char direction;
-                cin >> direction;
-                switch(direction){
-                    case 'w':
-                        if ((map.getPlayerRowPosition() - 1) >= 0){
-                            map.movePlayerUp();
-                        }
-                        else {
-                            cout << "Out of range of map" << endl;
-                        }
-                        break;
-                    case 's':
-                        if ((map.getPlayerRowPosition() + 1) <= 11){
-                            map.movePlayerDown();
-                        }
-                        else {
-                            cout << "Out of range of map" << endl;
-                        }
-                        break;
-                    case 'd':
-                        if ((map.getPlayerColPosition() + 1) <= 11){
-                            map.movePlayerRight();
-                        }
-                        else{
-                            cout << "Out of range of map" << endl;
-                        }
-                        break;
-                    case 'a':
-                        if ((map.getPlayerColPosition() -1) >= 0){
-                            map.movePlayerLeft();
-                        }
-                        else{
-                            cout << "Out of range of map" << endl;
-                        }
-                        break;
-                    case 'm':
-                        move = false;
-                        break;
-                    default:
-                        cout << "Invalid input"<< endl;
-                        break;
+    switch (choice)
+    {
+    case 1:
+    {
+        bool move = true;
+        while (move == true)
+        {
+            map.displayMap();
+            cout << "Select one: w. up s. down d. right a. left m. menu" << endl;
+            char direction;
+            cin >> direction;
+            switch (direction)
+            {
+            case 'w':
+                if ((map.getPlayerRowPosition() - 1) >= 0)
+                {
+                    map.movePlayerUp();
                 }
+                else
+                {
+                    cout << "Out of range of map" << endl;
+                }
+                break;
+            case 's':
+                if ((map.getPlayerRowPosition() + 1) <= 11)
+                {
+                    map.movePlayerDown();
+                }
+                else
+                {
+                    cout << "Out of range of map" << endl;
+                }
+                break;
+            case 'd':
+                if ((map.getPlayerColPosition() + 1) <= 11)
+                {
+                    map.movePlayerRight();
+                }
+                else
+                {
+                    cout << "Out of range of map" << endl;
+                }
+                break;
+            case 'a':
+                if ((map.getPlayerColPosition() - 1) >= 0)
+                {
+                    map.movePlayerLeft();
+                }
+                else
+                {
+                    cout << "Out of range of map" << endl;
+                }
+                break;
+            case 'm':
+                move = false;
+                break;
+            default:
+                cout << "Invalid input" << endl;
+                break;
             }
-            break;
         }
-        case 2:
-            cout << "Health:" << endl;
-            for (int i = 0; i < (steve.gethealthPercent() / 5); i++){
-                cout << "_";
+        break;
+    }
+    case 2:
+        cout << "Health:" << endl;
+        for (int i = 0; i < (steve.gethealthPercent() / 5); i++)
+        {
+            cout << "_";
+        }
+        cout << steve.gethealthPercent() << "%" << endl;
+        cout << "Space Suit Health: " << endl;
+        for (int i = 0; i < (steve.getsuitPercent() / 5); i++)
+        {
+            cout << "_";
+        }
+        cout << steve.getsuitPercent() << "%" << endl;
+        cout << "Fuel tank:" << endl;
+        for (int i = 0; i < (steve.getfuel() / 10000); i++)
+        {
+            cout << "_";
+        }
+        cout << steve.getfuel() << endl;
+        cout << "Planets explored: " << logbook.getnumPages() + 1 << endl;
+        cout << "Planets accurately reported habitable: " << logbook.getcorrectHabitable() << endl;
+        cout << "Planets inaccurately reported habitable: " << logbook.getincorrectHabitable() << endl;
+        cout << "- Money - $" << steve.getMoney() << endl;
+        cout << "- WEAPONS" << endl;
+        cout << "  1. Light Saber - " << steve.getWeaponstatus(0) << endl;
+        cout << "  2. Blaster - " << steve.getWeaponstatus(1) << endl;
+        cout << "  3. Beam gun - " << steve.getWeaponstatus(2) << endl;
+        cout << "- TRANSLATOR - " << steve.hasTranslator() << endl;
+        cout << "- SPACE SUIT GRADE #" << steve.getsuitGrade() << endl;
+        cout << "- MEDICAL KITS - " << steve.getmedKits() << endl;
+        cout << "- FUEL - " << steve.getfuel() << endl;
+        break;
+    case 3:
+        logbook.printPage(logbook.getnumPages());
+        break;
+    case 4:
+        goToStore(steve);
+        break;
+    case 5:
+        cout << "Are you sure you want to report back to mission control that this planet is habitable? As a reminder, here is your log book:" << endl;
+        logbook.printPage(logbook.getnumPages());
+        cout << endl;
+        cout << "Reporting this planet is irreversible. If this planet is in fact habitable, you will save millions of lives! If it's not the people sent to this planet will die." << endl;
+        cout << endl;
+        cout << "Ready to report? [y/n]" << endl;
+        char input;
+        cin >> input;
+        if (input == 'y')
+        {
+            if (map.isHabitable() == true)
+            {
+                cout << "Congratulations! You have saved " << logbook.getCapacity() << " million people! Planet " << logbook.getName() << " is their new home." << endl;
+                generateMap(map, logbook);
             }
-            cout << steve.gethealthPercent() << "%" << endl;
-            cout << "Space Suit Health: " << endl;
-            for (int i = 0; i < (steve.getsuitPercent() / 5); i++){
-                cout << "_";
+            else
+            {
+                cout << "Your choice has led to tragedy. " << logbook.getCapacity() << " million people were sent to " << logbook.getName() << " and died due to its in-hospitable conditions." << endl;
+                generateMap(map, logbook);
             }
-            cout << steve.getsuitPercent() << "%" << endl;
-            cout << "Fuel tank:" << endl;
-            for (int i = 0; i < (steve.getfuel() / 10000); i++){
-                cout << "_";
-            }
-            cout << steve.getfuel() << endl;
-            break;
-
+        }
     }
 }
+
 int main()
 {
     // Phase One
@@ -353,16 +483,19 @@ int main()
     // Phase Two
     Planet planet;
     Map map;
+    Logbook logbook;
+    logbook.setUser(steve.getName());
     cout << "You have landed on " << planet.getName() << endl;
     // generate map
     map.setPlayerColPosition(0);
     map.setPlayerRowPosition(0);
 
     // main menu
-    map.displayMap();
     bool phase2 = true;
-    while (phase2 == true){
-        phase2 == mainMenu(steve, map, phase2);
+    generateMap(map, logbook);
+    while (phase2 == true)
+    {
+        phase2 == mainMenu(steve, map, logbook, phase2);
     }
     return 0;
 }

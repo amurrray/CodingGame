@@ -53,10 +53,16 @@ void Player::changecurrentWeapon(int pos)
 {
     currentWeapon = pos;
 }
-void Player::acquireTranslator(){
+void Player::acquireTranslator()
+{
     translator = true;
 }
-void Player::addFuel(int amount){
+bool Player::hasTranslator()
+{
+    return translator;
+}
+void Player::addFuel(int amount)
+{
     fuel = fuel + amount;
 }
 // health
@@ -78,7 +84,8 @@ void Player::repairSuit()
 {
     suitPercent = 100;
 }
-void Player::upgradeSuit(int grade){
+void Player::upgradeSuit(int grade)
+{
     suitGrade = grade;
 }
 string Player::getName()
