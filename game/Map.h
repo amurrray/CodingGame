@@ -47,6 +47,10 @@ class Map
           void setNPC(bool);
           void setPlayerRowPosition(int);
           void setPlayerColPosition(int);
+          void movePlayerUp();
+          void movePlayerDown();
+          void movePlayerRight();
+          void movePlayerLeft();
 
           // other
           void displayMap();

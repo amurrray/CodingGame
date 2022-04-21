@@ -263,6 +263,18 @@ void Map::setPlayerColPosition(int col) {
     playerPosition[1] = col;
 }
 
+void Map::movePlayerUp(){
+    setPlayerRowPosition(getPlayerRowPosition() - 1);
+}
+void Map::movePlayerDown(){
+    setPlayerRowPosition(getPlayerRowPosition() + 1);
+}
+void Map::movePlayerRight(){
+    setPlayerColPosition(getPlayerColPosition() + 1);
+}
+void Map::movePlayerLeft(){
+    setPlayerColPosition(getPlayerColPosition() - 1);
+}
 /*
  * Algorithm: Create an NPC on the map 
  * if npc is present on map
