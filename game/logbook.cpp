@@ -16,6 +16,14 @@ void Logbook::setName(string name_)
 {
     name[numPages] = name_;
 }
+void Logbook::addCorrect()
+{
+    correctHabitable++;
+}
+void Logbook::addIncorrect()
+{
+    incorrectHabitable++;
+}
 void Logbook::newPage()
 {
     numPages = numPages + 1;

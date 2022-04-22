@@ -21,6 +21,8 @@ private:
 
 public:
     Logbook();
+    void addCorrect();
+    void addIncorrect();
     void setName(string name_);
     void newPage();
     string getName();

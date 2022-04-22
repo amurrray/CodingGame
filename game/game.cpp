@@ -38,6 +38,7 @@ int randNum(int low, int high)
 void generateMap(Map &map, Logbook &logbook)
 {
     logbook.newPage();
+    cout << "You have landed on " << &logbook.getName() << "..." << endl;
     map.resetMap();
     // spawn alien
     int x = randNum(1, 11);
@@ -81,6 +82,7 @@ void generateMap(Map &map, Logbook &logbook)
         map.spawnMisfortune(x, y, randNum(1, 3));
     }
     map.setMisfortuneCount(5);
+    map.displayMap();
 }
 
 void goToStore(Player &steve)
@@ -347,6 +349,7 @@ bool mainMenu(Player &steve, Map &map, Logbook &logbook, bool phase2)
     {
     case 1:
     {
+        // move 'round
         bool move = true;
         while (move == true)
         {
@@ -403,10 +406,95 @@ bool mainMenu(Player &steve, Map &map, Logbook &logbook, bool phase2)
                 cout << "Invalid input" << endl;
                 break;
             }
+            if (map.isNPCLocation() == true)
+            {
+                cout << "You have run into a friendly alien!" << endl;
+                if (steve.hasTranslator() == false)
+                {
+                    continue;
+                }
+                bool habitable;
+                habitable = map.isHabitable();
+                int rand = randNum(0, 100);
+                if ((habitable == true) && (rand >= 30))
+                {
+                    cout << "Hello human! I have looked around this planet and think this would make a great home for you." << endl;
+                    logbook.setalienAssessment("Hello human! I have looked around this planet and think this would make a great home for you.");
+                }
+                else if ((habitable == true) && (rand < 30))
+                {
+                    cout << "Hello human! I have looked around this planet and think this would be a terrible choice for a home. Your fragile species could not handle these conditions, I would suggest finding somplace else." << endl;
+                    logbook.setalienAssessment("Hello human! I have looked around this planet and think this would be a terrible choice for a home. Your fragile species could not handle these conditions, I would suggest finding somplace else.");
+                }
+                else if ((habitable == false) && (rand >= 30))
+                {
+                    cout << "Hello human! I have looked around this planet and think this would be a terrible choice for a home. Your fragile species could not handle these conditions, I would suggest finding somplace else." << endl;
+                    logbook.setalienAssessment("Hello human! I have looked around this planet and think this would be a terrible choice for a home. Your fragile species could not handle these conditions, I would suggest finding somplace else.");
+                }
+                else
+                {
+                    cout << "Hello human! I have looked around this planet and think this would be a terrible choice for a home. Your fragile species could not handle these conditions, I would suggest finding somplace else." << endl;
+                    logbook.setalienAssessment("Hello human! I have looked around this planet and think this would be a terrible choice for a home. Your fragile species could not handle these conditions, I would suggest finding somplace else.");
+                }
+            }
+            if (map.isMisfortuneLocaton() == true)
+            {
+                int misfortune = map.getMisfortuneType();
+                if (misfortune == 1)
+                {
+                    steve.weatherStorm();
+                }
+                else if (misfortune == 2)
+                {
+                    steve.crater();
+                }
+                else
+                {
+                    steve.spaceSickness();
+                }
+            }
+            if (map.isSiteLocation() == true)
+            {
+                int trait = map.getSiteTrait();
+                switch (trait)
+                {
+                case 1:
+                    cout << "You just discovered that this planet has water. This is a great sign. This discovery has been added to your log book." << endl;
+                    logbook.addGoodTrait("Water");
+                    break;
+                case 2:
+                    cout << "You just discovered that this planet has oxygen. This is a great sign. This discovery has been added to your log book." << endl;
+                    logbook.addGoodTrait("Oxygen");
+                    break;
+                case 3:
+                    cout << "You just discovered that this planet has fertile soil. This is a great sign. This discovery has been added to your log book." << endl;
+                    logbook.addGoodTrait("Fertile Soil");
+                    break;
+                case 4:
+                    cout << "You just discovered that this planet has toxic gas. This is a bad sign. This discovery has been added to your log book." << endl;
+                    logbook.addBadTrait("Toxic Gas");
+                    break;
+                case 5:
+                    cout << "You just discovered that this planet has bad atmosphere. This is a bad sign. This discovery has been added to your log book." << endl;
+                    logbook.addBadTrait("Bad Atmosphere");
+                    break;
+                case 6:
+                    cout << "You just discovered that this planet has extreme temperature. This is a bad sign. This discovery has been added to your log book." << endl;
+                    logbook.addBadTrait("Extreme Temeperature");
+                    break;
+                }
+                if (steve.isAlive() == false)
+                {
+                    cout << "You have died due to health loss. Had you planned better with more sophisticated materials, you may have been able to prevent this. You can no longer explore more of space." << end;
+                    return false;
+                }
+            }
         }
+        return true;
         break;
     }
     case 2:
+        // stats
         cout << "Health:" << endl;
         for (int i = 0; i < (steve.gethealthPercent() / 5); i++)
         {
@@ -437,14 +525,20 @@ bool mainMenu(Player &steve, Map &map, Logbook &logbook, bool phase2)
         cout << "- SPACE SUIT GRADE #" << steve.getsuitGrade() << endl;
         cout << "- MEDICAL KITS - " << steve.getmedKits() << endl;
         cout << "- FUEL - " << steve.getfuel() << endl;
+        return true;
         break;
     case 3:
+        // log book
         logbook.printPage(logbook.getnumPages());
+        return true;
         break;
     case 4:
+        // resource center
         goToStore(steve);
+        return true;
         break;
     case 5:
+        // report habitable
         cout << "Are you sure you want to report back to mission control that this planet is habitable? As a reminder, here is your log book:" << endl;
         logbook.printPage(logbook.getnumPages());
         cout << endl;
@@ -457,15 +551,41 @@ bool mainMenu(Player &steve, Map &map, Logbook &logbook, bool phase2)
         {
             if (map.isHabitable() == true)
             {
-                cout << "Congratulations! You have saved " << logbook.getCapacity() << " million people! Planet " << logbook.getName() << " is their new home." << endl;
+                cout << "Congratulations! You have saved ";
+                cout << logbook.getCapacity();
+                cout << " million people! Planet ";
+                cout << logbook.getName();
+                cout << " is their new home." << endl;
+                logbook.addCorrect();
                 generateMap(map, logbook);
             }
             else
             {
                 cout << "Your choice has led to tragedy. " << logbook.getCapacity() << " million people were sent to " << logbook.getName() << " and died due to its in-hospitable conditions." << endl;
+                logbook.addIncorrect();
                 generateMap(map, logbook);
             }
         }
+        return true;
+        break;
+
+    case 6:
+        // enter next wormhole
+        cout << "Entering Wormhole..." << endl;
+        generateMap(map, logbook);
+        return true;
+        break;
+
+    case 7:
+        // give up
+        cout << "[" << steve.getName() << "]: \"I give up...\"" << endl
+             << endl
+             << "  G A M E  O V E R" << endl
+             << endl
+             << "It is disappointing to hear that you have quit, humanity was depending on you..." << endl
+             << endl;
+        return false;
+        break;
     }
 }
 
@@ -485,7 +605,6 @@ int main()
     Map map;
     Logbook logbook;
     logbook.setUser(steve.getName());
-    cout << "You have landed on " << planet.getName() << endl;
     // generate map
     map.setPlayerColPosition(0);
     map.setPlayerRowPosition(0);
@@ -495,7 +614,7 @@ int main()
     generateMap(map, logbook);
     while (phase2 == true)
     {
-        phase2 == mainMenu(steve, map, logbook, phase2);
+        phase2 = mainMenu(steve, map, logbook, phase2);
     }
     return 0;
 }

@@ -41,6 +41,7 @@ public:
     // health
     void takeDamage(int health, int suit);
     void playerDied();
+    bool isAlive();
     void repairSuit();
     void upgradeSuit(int grade);
     // battle

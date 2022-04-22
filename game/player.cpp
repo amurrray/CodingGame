@@ -80,6 +80,10 @@ void Player::playerDied()
 {
     alive = false;
 }
+bool Player::isAlive()
+{
+    return alive;
+}
 void Player::repairSuit()
 {
     suitPercent = 100;
