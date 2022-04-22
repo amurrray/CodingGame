@@ -38,6 +38,7 @@ public:
     void acquireTranslator();
     bool hasTranslator();
     void addFuel(int amount);
+    void travel();
     // health
     void takeDamage(int health, int suit);
     void playerDied();
@@ -56,7 +57,7 @@ public:
     // misc
     void changePlanet();
     void usemedKit();
-    int addmedKit(int number);
+    void addmedKit(int number);
     void buyWeapon(int pos);
 };
 #endif

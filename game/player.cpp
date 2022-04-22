@@ -1,4 +1,5 @@
 #include "player.h"
+#include <iostream>
 #include "weapons.h"
 using namespace std;
 Player::Player()
@@ -24,6 +25,9 @@ int Player::getMoney()
 void Player::chargeMoney(int price)
 {
     money = money - price;
+}
+void Player::travel(){
+    fuel = fuel - 5000;
 }
 int Player::gethealthPercent()
 {
@@ -68,6 +72,7 @@ void Player::addFuel(int amount)
 // health
 void Player::takeDamage(int health, int suit)
 {
+    cout << "Youve take damage" << endl;
     healthPercent = healthPercent - health;
     suitPercent = suitPercent - suit;
     usemedKit();
@@ -145,17 +150,9 @@ void Player::usemedKit()
         healthPercent = healthPercent + 40;
     }
 }
-int Player::addmedKit(int number)
+void Player::addmedKit(int number)
 {
-    if ((medKits + number) <= 5)
-    {
-        medKits = medKits + number;
-        return medKits;
-    }
-    else
-    {
-        return -1;
-    }
+    medKits = medKits + number;
 }
 void Player::buyWeapon(int pos)
 {
