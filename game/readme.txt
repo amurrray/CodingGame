@@ -1,0 +1,1 @@
+to compile code compile game.cpp logbook.cpp Map.cpp planet.cpp player.cpp weapons.cpp
